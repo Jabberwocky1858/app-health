@@ -108,3 +108,30 @@ curl 0.0.0.0:8080/healthctl/ready -v
 <
 * Connection #0 to host 0.0.0.0 left intact
 ----
+
+== image build options
+https://quarkus.io/guides/container-image#docker[quarkus docs]
+
+=== Docker
+----
+mvn quarkus:add-extension -Dextensions="container-image-docker"
+----
+
+=== S2I
+----
+mvn quarkus:add-extension -Dextensions="container-image-s2i"
+----
+
+=== build docker
+----
+mvn clean package -Dquarkus.container-image.build=true -Dquarkus.container-image.builder=docker
+----
+----
+docker images
+REPOSITORY                                    TAG              IMAGE ID       CREATED          SIZE
+work/app-health                               1.0.0-SNAPSHOT   6dece7ca7a16   17 seconds ago   388MB
+----
+
+
+=== push image
+see the docs
