@@ -1,0 +1,6 @@
+= README
+:toc:
+
+== Included Documents
+
+include::doc/log.adoc[]

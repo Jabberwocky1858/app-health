@@ -1,0 +1,110 @@
+= Project Logbook
+:toc:
+
+== project creation
+
+----
+mvn io.quarkus:quarkus-maven-plugin:2.0.0.Final:create
+----
+
+== project configuration
+
+----
+mvn quarkus:list-extensions | grep smallrye
+----
+
+----
+mvn quarkus:add-extension -Dextensions="smallrye-health,rest-client,smallrye-openapi,resteasy-jsonb,smallrye-metrics,smallrye-fault-tolerance"
+----
+
+== functionality
+
+=== health checks
+implement liveness check
+implement readiness check
+
+=== state
+hold desired state of the healthchecks
+
+== build
+----
+mvn verify
+----
+
+== run
+----
+java -jar target/quarkus-app/quarkus-run.jar
+----
+
+== Endpoints
+
+=== Openapi
+curl 0.0.0.0:8080/q/openapi
+----
+openapi: 3.0.3
+info:
+  title: Generated API
+  version: "1.0"
+paths:
+  /healthctl/live:
+    get:
+      responses:
+        "200":
+          description: OK
+  /healthctl/ready:
+    get:
+      responses:
+        "200":
+          description: OK
+----
+
+=== Healthchecks
+----
+ curl 0.0.0.0:8080/q/health
+
+{
+    "status": "UP",
+    "checks": [
+        {
+            "name": "ready",
+            "status": "UP"
+        },
+        {
+            "name": "alive",
+            "status": "UP"
+        }
+    ]
+}
+----
+
+==== liveness DOWN
+----
+curl 0.0.0.0:8080/healthctl/live -v
+*   Trying 0.0.0.0:8080...
+* Connected to 0.0.0.0 (127.0.0.1) port 8080 (#0)
+> GET /healthctl/live HTTP/1.1
+> Host: 0.0.0.0:8080
+> User-Agent: curl/7.76.1
+> Accept: */*
+>
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 204 No Content
+<
+* Connection #0 to host 0.0.0.0 left intact
+----
+
+==== readiness DOWN
+----
+curl 0.0.0.0:8080/healthctl/ready -v
+*   Trying 0.0.0.0:8080...
+* Connected to 0.0.0.0 (127.0.0.1) port 8080 (#0)
+> GET /healthctl/ready HTTP/1.1
+> Host: 0.0.0.0:8080
+> User-Agent: curl/7.76.1
+> Accept: */*
+>
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 204 No Content
+<
+* Connection #0 to host 0.0.0.0 left intact
+----
