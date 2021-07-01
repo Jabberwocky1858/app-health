@@ -1,7 +1,9 @@
 apiVersion: v2
-description: A Helm chart to build and deploy Quarkus applications
+description: BKE-App Helm Chart
 keywords:
 - runtimes
 - quarkus
-name: quarkus
-version: 0.0.3
+- app-health
+- bke
+name: app-health
+version: 1.0.0

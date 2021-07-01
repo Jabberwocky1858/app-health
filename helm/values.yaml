@@ -1,9 +1,9 @@
 image:
   ## Name of the image you want to build/deploy
   ## Defaults to the release name
-  name:
+  name: ghcr.io/gepaplexx/app-health
   ## Tag that you want to build/deploy
-  tag: latest
+  tag: 1.0.0-snapshot
 
 ## Build-specific values (for configuring BuildConfig and ImageStream)
 build:
@@ -12,7 +12,7 @@ build:
   enabled: false
 
   ## Git URI, Ref, and ContextDir
-  uri: https://github.com/redhat-developer-helm-quickstarts/quarkus-getting-started
+  uri: https://github.com/gepaplexx/app-health
   ref: main
   contextDir:
 
@@ -74,12 +74,12 @@ deploy:
 
   ## Freeform resources for Quarkus. More information: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   resources:
-  #  limits:
-  #    cpu: 100m
-  #    memory: 256Mi
-  #  requests:
-  #    cpu: 50m
-  #    memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
   ## Type of service to create. More information: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   serviceType: ClusterIP
@@ -108,16 +108,19 @@ deploy:
 
   ## Freeform Liveness Probe. More information: https://docs.openshift.com/container-platform/4.6/applications/application-health.html#application-health-about_application-health
   livenessProbe:
-    tcpSocket:
-      port: http
+    httpGet:
+      path: /q/health/live
+      port: 8080
+    initialDelaySeconds: 60
   ## If you don't want a livenessProbe, override like this in your values file
   # livenessProbe: ''
 
   ## Freeform Readiness Probe. More information: https://docs.openshift.com/container-platform/4.6/applications/application-health.html#application-health-about_application-health
   readinessProbe:
     httpGet:
-      path: /
-      port: http
+      path: /q/health/ready
+      port: 8080
+    initialDelaySeconds: 60
   ## If you don't want a readinessProbe, override like this in your values file
   # readinessProve: ''
 
